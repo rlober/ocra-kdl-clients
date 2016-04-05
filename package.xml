@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package>
+  <name>ocra-kdl-clients</name>
+  <version>1.0.0</version>
+  <description>The ocra-kdl-clients package</description>
+  <maintainer email="hoarau@isir.upmc.fr">Antoine Hoarau</maintainer>
+
+  <license>GPLv2</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>cmake_modules</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>ocra-kdl</build_depend>
+
+  <run_depend>cmake_modules</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>ocra-kdl</run_depend>
+
+
+  <export>
+  </export>
+</package>
