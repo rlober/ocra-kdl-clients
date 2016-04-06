@@ -20,18 +20,18 @@ bool ExampleClient::initialize()
 
     ocra_recipes::TRAJECTORY_TYPE trajType = ocra_recipes::MIN_JERK;
 
-    waypoints.resize(3,1);
-    waypoints <<    0.33,
-                    -0.06,
-                    0.65;
+    waypoints.resize(3,4);
+    waypoints <<     0.33,  0.0 , -0.1 , -0.40,
+                    -0.06, -0.2 , -0.5, -0.20,
+                     0.65, 0.75 , 0.4 , 0.35;
 
     ocra_recipes::TERMINATION_STRATEGY termStrategy = ocra_recipes::BACK_AND_FORTH;
 
     endEffectorThread = std::make_shared<ocra_recipes::TrajectoryThread>(10, endEffectorTaskPortName, waypoints, trajType, termStrategy);
 
     // endEffectorThread->setDisplacement(0.2);
-    endEffectorThread->setGoalErrorThreshold(0.05);
-    endEffectorThread->setMaxVelocity(0.1);
+    endEffectorThread->setGoalErrorThreshold(0.01);
+    endEffectorThread->setMaxVelocity(0.45);
 
     bool done=false;
 
@@ -50,7 +50,7 @@ void ExampleClient::release()
 
 void ExampleClient::loop()
 {
-    if((yarp::os::Time::now() - startTime) > 5.0 && !done)
+    if((yarp::os::Time::now() - startTime) > 1.0 && !done)
     {
         if(trigger){
             endEffectorThread->start();
