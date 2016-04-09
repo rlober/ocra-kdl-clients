@@ -24,10 +24,6 @@ private:
     Eigen::MatrixXd waypoints;
 
     std::shared_ptr<ocra_recipes::TrajectoryThread> endEffectorThread;
-
-    bool done;
-    bool p1, p2, p3;
 };
-
 
 #endif // EXAMPLE_CLIENT_H
