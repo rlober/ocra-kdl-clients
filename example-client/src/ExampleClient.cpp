@@ -16,8 +16,6 @@ bool ExampleClient::initialize()
     startTime = yarp::os::Time::now();
     trigger = true;
 
-    std::string endEffectorTaskPortName = clientComs->getTaskPortName("cartEndEffector");
-
     ocra_recipes::TRAJECTORY_TYPE trajType = ocra_recipes::MIN_JERK;
 
     waypoints.resize(3,4);
@@ -25,19 +23,15 @@ bool ExampleClient::initialize()
                     -0.06, -0.2 , -0.5, -0.20,
                      0.65, 0.75 , 0.4 , 0.35;
 
-    ocra_recipes::TERMINATION_STRATEGY termStrategy = ocra_recipes::BACK_AND_FORTH;
+    // Pick between the two different modes.
+    // ocra_recipes::TERMINATION_STRATEGY termStrategy = ocra_recipes::BACK_AND_FORTH;
+    ocra_recipes::TERMINATION_STRATEGY termStrategy = ocra_recipes::CYCLE;
 
-    endEffectorThread = std::make_shared<ocra_recipes::TrajectoryThread>(10, endEffectorTaskPortName, waypoints, trajType, termStrategy);
 
-    // endEffectorThread->setDisplacement(0.2);
+    endEffectorThread = std::make_shared<ocra_recipes::TrajectoryThread>(10, "cartEndEffector", waypoints, trajType, termStrategy);
+
     endEffectorThread->setGoalErrorThreshold(0.01);
     endEffectorThread->setMaxVelocity(0.45);
-
-    bool done=false;
-
-    p1 = true;
-    p2 = true;
-    p3 = true;
 
     std::cout << "Thread started." << std::endl;
     return true;
@@ -56,30 +50,6 @@ void ExampleClient::loop()
             endEffectorThread->start();
             trigger = false;
         }
-
-        // if ((yarp::os::Time::now()-startTime)>10.0){
-        //     if(p1){
-        //         p1=false;
-        //         std::cout << "Changing to BACK_AND_FORTH mode:" << std::endl;
-        //         endEffectorThread->setTerminationStrategy(ocra_recipes::BACK_AND_FORTH);
-        //     }
-        //     if ((yarp::os::Time::now()-startTime)>20.0){
-        //         if(p2){
-        //             p2=false;
-        //             std::cout << "Changing to STOP_THREAD mode:" << std::endl;
-        //             endEffectorThread->setTerminationStrategy(ocra_recipes::STOP_THREAD);
-        //         }
-        //         if ((yarp::os::Time::now()-startTime)>30.0){
-        //             if(p3){
-        //                 p3=false;
-        //                 std::cout << "Finished while loop!" << std::endl;
-        //                 std::cout << "Stopping thread..." << std::endl;
-        //                 endEffectorThread->stop();
-        //                 done=true;
-        //             }
-        //         }
-        //     }
-        // }
     }
 
 }
